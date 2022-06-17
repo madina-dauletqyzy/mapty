@@ -7,6 +7,12 @@
   --color-light--1: #aaa;
   --color-light--2: #ececec;
   --color-light--3: rgb(214, 222, 224);
+
+  --bp-largest: 75em; 
+--bp-medium: 62.5em; 
+--bp-small: 46.875em; 
+--bp-micro: 31.25em;
+
 }
 
 * {
@@ -32,6 +38,7 @@ body {
   padding: 2.5rem;
 
   display: flex;
+
 }
 
 /* GENERAL */
@@ -50,9 +57,9 @@ a:visited {
 }
 
 .logo {
-  height: 5.2rem;
+  height: 4.2rem;
   align-self: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .workouts {
@@ -250,7 +257,7 @@ a:visited {
   justify-content: space-between;
   font-size: 1.4rem;
   align-items: center;
-  padding: 1rem 1rem 0 1rem;
+  padding: 0 1rem 0 1rem;
 }
 .edit-tab-element{
   cursor: pointer;
@@ -260,9 +267,10 @@ a:visited {
 }
 
 .validation__msg {
-  font-size: 1.5rem;
+  font-size: 14px;
+  color: red;
   transition: all .7s;
-  height: 0;
+  padding: 0 1rem 0 1rem;
 }
 p{
   margin-right: 6px;
@@ -272,31 +280,45 @@ p{
   justify-content: space-between;
   width: 40px;
 }
-.sortType{
-
+.sortContainer{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 16px;
   overflow: hidden;
   transition: all 0.5s;
-  height: 4.2rem;
-  margin: 0.8rem 1rem 0.8rem 1rem;
+  height: 6.4rem;
+  margin: 0.5rem 1rem 0.5rem 1rem;  
 }
-.fa-arrow-down{
+
+.fa-arrow-up, .fa-arrow-down, .fa-rotate-left{
   font-size: 13px;
-  cursor: pointer;
 }
-.fa-arrow-up{
-  display: none;
+.default{
   font-size: 13px;
-  cursor: pointer;
+  margin-right: 5px;
 }
 
 .sort__devider{
   margin: 0 0 1rem 0;
   border: 1px solid var(--color-light--1);
+
 }
 .zero__height {
   height: 0;
 }
+.sort_button-container{
+  background-color: var(--color-dark--1);
+    border: none;
+    color: var(--color-light--2);
+    transition: all .5s;
+    font-size: 16px;
+
+}
+.sort_button-container:hover{
+  
+  transform: translateY(1px) scale(1.1);
+}
+.display-none{
+  display: none;
+}
+

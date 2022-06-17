@@ -31,31 +31,35 @@
       </div>
       </div>
     
-  <div class="sortType zero__height">
-    <div class="checkbox-container">
-      <label for="date"> 📆</label>
+  <div class="sortContainer zero__height">
+    <button data-type="id" data-order='desc' class="sort_button-container" >
+      <span > 📆</span>
+      <i class="fa-solid fa-arrow-down "></i>
+    <i class="fa-solid fa-arrow-up"></i>  
       
-      <i class="fa-solid fa-arrow-down"></i>
-      <i class="fa-solid fa-arrow-up"></i>
+
+    </button>
+    <button data-type="distance" data-order='desc' class="sort_button-container">
+    <span> 📍</span>
+    <i class="fa-solid fa-arrow-down "></i>
+    <i class="fa-solid fa-arrow-up"></i>  
+    </button>
     
-        </div>
-    <div class="sort_button-container">
-    <label for="distance"> 📍</label>
-    <i class="fa-solid fa-arrow-down"></i>
-    <i class="fa-solid fa-arrow-up"></i>  </div>
-    <div class="sort_button-container">
-    <label for="type"> 🏃‍/🚴‍</label>
-    <i class="fa-solid fa-arrow-down"></i>
-    <i class="fa-solid fa-arrow-up"></i>  </div>
-    <div class="sort_button-container">
-      <label for="duration"> ⏱</label>
+    <button data-type="duration" data-order='desc' class="sort_button-container">
+      <span> ⏱</span>
       <i class="fa-solid fa-arrow-down"></i>
         <i class="fa-solid fa-arrow-up"></i>  
+    </button>
+    
+    <button data-type="type" data-order='defaul' class="sort_button-container">
+      <i class="fa-solid fa-rotate-left"></i>
+      <span class = 'default'> By default</span>
+        </button>
   </div>
   
-  </div>
-  <hr class="sort__devider">
       <ul class="workouts">
+        <div class="validation__msg display-none">Inputs have to be<span class="positive__numbers"> positive numbers!</span></div>
+
         <form class="form hidden">
           <i class="fa-solid fa-xmark"></i>
             <div class="form__row">
@@ -94,8 +98,8 @@
           <i type='submit' class="fa-solid fa-square-check"></i>
           <button class="form__btn">OK</button>
         </form>
-       <!-- <div class="validation__msg">Inputs have to be<span class="positive__numbers"> positive numbers!</span></div>-->
-        
+       <hr class="sort__devider">
+
     </div>
 
     <div id="map"></div>

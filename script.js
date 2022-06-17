@@ -11,7 +11,12 @@ const btnSumbitWorkout = document.querySelector('.fa-square-check');
 const btnDeleteAll = document.querySelector('.delete-all');
 const btnClose = document.querySelector('.fa-xmark');
 const btnSort = document.querySelector('.sort');
-const btnsSortTypes = document.querySelector('.sortType');
+const btnSortContainer = document.querySelector('.sortContainer');
+const btnArrowUp = document.querySelector('.fa-arrow-up');
+const btnArrowDown = document.querySelector('.fa-arrow-down');
+const sortDivider = document.querySelector('.sort__devider');
+const validationWrongInput = document.querySelector('.validation__msg');
+
 class Workout {
   date = new Date();
   id = Date.now() + '';
@@ -86,14 +91,13 @@ class App {
     this._getLocalStorage();
 
     form.addEventListener('submit', this._submitWorkout.bind(this));
-    //form.addEventListener('submit', this._newWorkout.bind(this));
 
     inputType.addEventListener('change', this._toggleElevationField.bind(this));
-    //containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
     btnSumbitWorkout.addEventListener('click', this._submitWorkout.bind(this));
     containerWorkouts.addEventListener('click', this._handleWorkout.bind(this));
     btnDeleteAll.addEventListener('click', this._deleteAllWorkouts.bind(this));
     btnSort.addEventListener('click', this._toggleSortBtns.bind(this));
+    btnSortContainer.addEventListener('click', this._sortWorkouts.bind(this));
   }
   _getPosition() {
     if (navigator.geolocation) {
@@ -174,7 +178,7 @@ class App {
     inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
   }
   _toggleSortBtns() {
-    btnsSortTypes.classList.toggle('zero__height');
+    btnSortContainer.classList.toggle('zero__height');
   }
   _newWorkout(e) {
     const validInputs = (...inputs) =>
@@ -199,7 +203,7 @@ class App {
         !validInputs(distance, duration, cadence) ||
         !allPositive(distance, duration, cadence)
       )
-        return alert('input have to be positive number');
+        return this._showErrorMessage('wrongInput');
       workout = new Running([lat, lng], distance, duration, cadence);
     }
     if (type === 'cycling') {
@@ -208,7 +212,7 @@ class App {
         !validInputs(distance, duration, elevation) ||
         !allPositive(distance, duration)
       )
-        return alert('input have to be positive number');
+        return this._showErrorMessage('wrongInput');
 
       workout = new Cycling([lat, lng], distance, duration, elevation);
     }
@@ -220,6 +224,14 @@ class App {
     this._setLocalStorage();
   }
 
+  _showErrorMessage(type) {
+    if (type === 'wrongInput') {
+      validationWrongInput.classList.remove('display-none');
+      setTimeout(() => {
+        validationWrongInput.classList.add('display-none');
+      }, 3000);
+    }
+  }
   _renderWorkOutMarker(workout) {
     let layer = L.marker(workout.coords)
       .addTo(this.#map)
@@ -296,7 +308,7 @@ class App {
     if (this.#isEditMode) {
       curWorkoutEl.outerHTML = html;
     } else {
-      form.insertAdjacentHTML('afterend', html);
+      sortDivider.insertAdjacentHTML('afterend', html);
     }
   }
   _handleWorkout(e) {
@@ -335,7 +347,60 @@ class App {
 
     this._setIntoView(workout);
   }
+  _sortWorkouts(e) {
+    if (!this.#map) return;
+    const sortBtnEl = e.target.closest('.sort_button-container');
+    if (!sortBtnEl) return;
+    const sortType = sortBtnEl.dataset.type;
+    let sortOrder = sortBtnEl.dataset.order;
+
+    let sortedArray = [];
+
+    // prettier-ignore
+    document.querySelectorAll('.fa-arrow-up').forEach(el => el.classList.remove('display-none'));
+    // prettier-ignore
+    document.querySelectorAll('.fa-arrow-down').forEach(el => el.classList.remove('display-none'));
+
+    if (sortOrder === 'desc') {
+      sortBtnEl.dataset.order = 'acs';
+
+      sortBtnEl.querySelector('.fa-arrow-up').classList.add('display-none');
+      // prettier-ignore
+      sortBtnEl.querySelector('.fa-arrow-down').classList.remove('display-none');
+
+      // prettier-ignore
+      document.querySelectorAll('.workout').forEach(workout => workout.remove());
+
+      sortedArray = this.#workouts
+        .slice()
+        .sort((a, b) => b[sortType] - a[sortType]);
+    } else if (sortOrder === 'acs') {
+      sortBtnEl.dataset.order = 'desc';
+
+      sortBtnEl.querySelector('.fa-arrow-down').classList.add('display-none');
+      // prettier-ignore
+      sortBtnEl.querySelector('.fa-arrow-up').classList.remove('display-none');
+
+      // prettier-ignore
+      document.querySelectorAll('.workout').forEach(workout => workout.remove());
+
+      sortedArray = this.#workouts
+        .slice()
+        .sort((a, b) => a[sortType] - b[sortType]);
+    } else {
+      document
+        .querySelectorAll('.workout')
+        .forEach(workout => workout.remove());
+      sortedArray = this.#workouts;
+    }
+    const lastWorkout = sortedArray.at(-1);
+    this._setIntoView(lastWorkout);
+    sortedArray.forEach(sortedWorkout => {
+      this._renderWorkout(sortedWorkout);
+    });
+  }
   _editWorkout(e, workoutEl, workout) {
+    if (!this.#map) return;
     if (!workout) return;
     const validInputs = (...inputs) =>
       inputs.every(inp => Number.isFinite(inp));
@@ -365,7 +430,7 @@ class App {
         !validInputs(editDistance, editDuration, editCadence) ||
         !allPositive(editDistance, editDuration, editCadence)
       )
-        return alert('Inputs have to be a positive number!');
+        return this._showErrorMessage('wrongInput');
       // change workout data
       // prettier-ignore
       [workout.distance, workout.duration,workout.cadence] = [editDistance, editDuration, editCadence]
@@ -379,7 +444,7 @@ class App {
         !validInputs(editDistance, editDuration, editElevation) ||
         !allPositive(editDistance, editDuration, editElevation)
       )
-        return alert('input have to be positive number');
+        return this._showErrorMessage('wrongInput');
       // prettier-ignore
       [workout.distance, workout.duration, workout.elevation] = [editDistance, editDuration, editElevation];
       workout.elevationGain = editElevation;
@@ -393,6 +458,7 @@ class App {
     this._setLocalStorage();
   }
   _deleteWorkout(workoutEl, indexOfWorkoutEl) {
+    if (!this.#map) return;
     if (!workoutEl) return;
     workoutEl.remove();
     this.#workouts.splice(indexOfWorkoutEl, 1);
@@ -403,6 +469,7 @@ class App {
     this._setLocalStorage();
   }
   _deleteAllWorkouts() {
+    if (!this.#map) return;
     if (!this.#workoutElArray) return;
     this.#workoutElArray = document.querySelectorAll('.workout');
     let i = this.#markerArray.length - 1;
@@ -415,6 +482,7 @@ class App {
     // location.reload();
   }
   _setIntoView(workout) {
+    if (!this.#map) return;
     if (!workout) return;
     this.#map.setView(workout.coords, this.#mapZoomLevel, {
       animate: true,
