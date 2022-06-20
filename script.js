@@ -16,6 +16,7 @@ const btnArrowUp = document.querySelector('.fa-arrow-up');
 const btnArrowDown = document.querySelector('.fa-arrow-down');
 const sortDivider = document.querySelector('.sort__devider');
 const validationWrongInput = document.querySelector('.validation__msg');
+const instructionMsg = document.querySelector('.instruction-msg');
 
 class Workout {
   date = new Date();
@@ -86,7 +87,6 @@ class App {
   #isSorted = false;
   constructor() {
     this._getPosition();
-
     //get data from localstorage
     this._getLocalStorage();
 
@@ -309,6 +309,7 @@ class App {
       curWorkoutEl.outerHTML = html;
     } else {
       sortDivider.insertAdjacentHTML('afterend', html);
+      instructionMsg.classList.add('display-none');
     }
   }
   _handleWorkout(e) {
@@ -467,6 +468,9 @@ class App {
     const lastWorkout = this.#workouts.at(-1);
     this._setIntoView(lastWorkout);
     this._setLocalStorage();
+    if (this.#workouts.length <= 0) {
+      instructionMsg.classList.remove('display-none');
+    }
   }
   _deleteAllWorkouts() {
     if (!this.#map) return;
@@ -479,6 +483,7 @@ class App {
       i--;
     }
     localStorage.removeItem('workouts');
+
     // location.reload();
   }
   _setIntoView(workout) {

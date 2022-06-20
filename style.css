@@ -322,3 +322,11 @@ p{
   display: none;
 }
 
+.instruction-msg{
+  background-color: var(--color-dark--2);
+  border-radius: 5px;
+  padding: 2.5rem 2.75rem;
+  margin-bottom: 1.75rem;
+  font-size: 14px;
+  
+}
