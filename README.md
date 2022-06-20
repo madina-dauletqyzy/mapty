@@ -28,6 +28,8 @@ Web app to track and manage workouts on a map, you can see the project live by c
 
 * Add ability to sort workouts by certain fields(date, distance, duration)
 
+* Add ability to set overview of all workouts
+
 # Built with
 
 * Html, CSS, VanillaJS
