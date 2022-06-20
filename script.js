@@ -483,6 +483,7 @@ class App {
       i--;
     }
     localStorage.removeItem('workouts');
+    instructionMsg.classList.remove('display-none');
 
     // location.reload();
   }
