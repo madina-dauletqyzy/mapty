@@ -16,7 +16,10 @@ const btnArrowUp = document.querySelector('.fa-arrow-up');
 const btnArrowDown = document.querySelector('.fa-arrow-down');
 const sortDivider = document.querySelector('.sort__devider');
 const validationWrongInput = document.querySelector('.validation__msg');
-const instructionMsg = document.querySelector('.instruction-msg');
+const instructionMsg = document.querySelector('.instruction_msg');
+const confirmationMsg = document.querySelector('.confirmation__msg');
+const confMsgYesBtn = document.querySelector('.yes__button');
+const confMsgNoBtn = document.querySelector('.no__button');
 
 class Workout {
   date = new Date();
@@ -95,9 +98,11 @@ class App {
     inputType.addEventListener('change', this._toggleElevationField.bind(this));
     btnSumbitWorkout.addEventListener('click', this._submitWorkout.bind(this));
     containerWorkouts.addEventListener('click', this._handleWorkout.bind(this));
-    btnDeleteAll.addEventListener('click', this._deleteAllWorkouts.bind(this));
+    btnDeleteAll.addEventListener('click', this._showConfirmationMessage);
     btnSort.addEventListener('click', this._toggleSortBtns.bind(this));
     btnSortContainer.addEventListener('click', this._sortWorkouts.bind(this));
+    confMsgYesBtn.addEventListener('click', this._deleteAllWorkouts.bind(this));
+    confMsgNoBtn.addEventListener('click', this._hideConfirmationMessage);
   }
   _getPosition() {
     if (navigator.geolocation) {
@@ -224,6 +229,12 @@ class App {
     this._setLocalStorage();
   }
 
+  _showConfirmationMessage() {
+    confirmationMsg.classList.remove('display-none');
+  }
+  _hideConfirmationMessage() {
+    confirmationMsg.classList.add('display-none');
+  }
   _showErrorMessage(type) {
     if (type === 'wrongInput') {
       validationWrongInput.classList.remove('display-none');
@@ -484,7 +495,7 @@ class App {
     }
     localStorage.removeItem('workouts');
     instructionMsg.classList.remove('display-none');
-
+    this._hideConfirmationMessage();
     // location.reload();
   }
   _setIntoView(workout) {

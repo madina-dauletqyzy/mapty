@@ -319,11 +319,9 @@ p{
   
   transform: translateY(1px) scale(1.1);
 }
-.display-none{
-  display: none;
-}
 
-.instruction-msg{
+
+.instruction_msg{
   background-color: var(--color-dark--2);
   border-radius: 5px;
   padding: 2.5rem 2.75rem;
@@ -331,7 +329,49 @@ p{
   font-size: 14px;
   
 }
+.confirmation__msg{
+  position: absolute;
+  top:0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color:rgba(0,0,0,0.5);
+  z-index: 99999;
+  display: flex;
 
+  align-items: center;
+  justify-content: center;
+}
+.confirmation_msg__inner{
+  background-color: var(--color-dark--2);
+  padding: 3rem;
+  border-radius: 5px;
+}
+.conf_msg_question{
+  margin-bottom: 3rem;
+}
+.conf_msg__buttons{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: .5rem;
+}
+.choice__button{
+  border: none;
+  background-color: var(--color-light--1);
+  padding: 1.25rem;
+  border-radius: 5px;
+  min-width: 70px;
+}
+.yes__button{
+  background-color: var(--color-brand--1);
+}
+.no__button{
+  background-color:  var(--color-brand--2);
+}
+.display-none{
+  display: none;
+}
 @media only screen and (max-width: 750px) {
   body {
     display: flex;
@@ -342,6 +382,9 @@ p{
     height: 50vh;
     padding: 10px;
   }
+  /*.confirmation_msg__inner{
+    margin: 20px;
+  }*/
   
 }
 @media only screen and (max-width: 360px){
