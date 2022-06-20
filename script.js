@@ -20,6 +20,7 @@ const instructionMsg = document.querySelector('.instruction_msg');
 const confirmationMsg = document.querySelector('.confirmation__msg');
 const confMsgYesBtn = document.querySelector('.yes__button');
 const confMsgNoBtn = document.querySelector('.no__button');
+const overViewBtn = document.querySelector('.overview');
 
 class Workout {
   date = new Date();
@@ -103,7 +104,9 @@ class App {
     btnSortContainer.addEventListener('click', this._sortWorkouts.bind(this));
     confMsgYesBtn.addEventListener('click', this._deleteAllWorkouts.bind(this));
     confMsgNoBtn.addEventListener('click', this._hideConfirmationMessage);
+    overViewBtn.addEventListener('click', this._overview.bind(this));
   }
+
   _getPosition() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -530,6 +533,28 @@ class App {
   reset() {
     localStorage.removeItem('workouts');
     location.reload();
+  }
+  _overview() {
+    if (this.#workouts.length === 0) return;
+
+    const latitudes = this.#workouts.map(w => {
+      return w.coords[0];
+    });
+    const longitudes = this.#workouts.map(w => {
+      return w.coords[1];
+    });
+    const minLat = Math.min(...latitudes);
+    const maxLat = Math.max(...latitudes);
+    const minLong = Math.min(...longitudes);
+    const maxLong = Math.max(...longitudes);
+
+    this.#map.fitBounds(
+      [
+        [maxLat, minLong],
+        [minLat, maxLong],
+      ],
+      { padding: [70, 70] }
+    );
   }
 }
 
